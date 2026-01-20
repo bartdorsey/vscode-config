@@ -1,0 +1,57 @@
+{
+  "name": "vscode-config",
+  "displayName": "My Personal VSCode Config",
+  "description": "Configure VSCode settings",
+  "version": "0.0.1",
+  "publisher": "bartdorsey",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "bartdorsey.configureSettings",
+        "title": "Configure Default Settings"
+      },
+      {
+        "command": "bartdorsey.enableCopilot",
+        "title": "Enable GitHub Copilot"
+      },
+      {
+        "command": "bartdorsey.disableCopilot",
+        "title": "Disable GitHub Copilot"
+      },
+      {
+        "command": "bartdorsey.cleanup",
+        "title": "Cleanup (Uninstall Extensions & Revert Settings)"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.80.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vscode/vsce": "^3.6.2",
+    "eslint": "^8.40.0",
+    "typescript": "^5.1.3"
+  }
+}

@@ -1,0 +1,36 @@
+stages:
+  - build
+  - release
+
+build:
+  stage: build
+  image: node:24
+  script:
+    - npm ci
+    - npm run compile
+    - npx vsce package
+    - mv vscode-config-*.vsix vscode-config-${CI_COMMIT_TAG}.vsix
+    - echo BUILD_JOB_ID=$CI_JOB_ID >> job.env
+  artifacts:
+    paths:
+      - "*.vsix"
+    reports:
+      dotenv: job.env
+
+release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - job: build
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - echo "Creating release for tag $CI_COMMIT_TAG"
+  release:
+    tag_name: $CI_COMMIT_TAG
+    description: "Release $CI_COMMIT_TAG"
+    assets:
+      links:
+        - name: "vscode-config-${CI_COMMIT_TAG}.vsix"
+          url: "${CI_PROJECT_URL}/-/jobs/${BUILD_JOB_ID}/artifacts/file/vscode-config-${CI_COMMIT_TAG}.vsix"
