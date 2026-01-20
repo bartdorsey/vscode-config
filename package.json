@@ -51,7 +51,12 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext ts",
-    "package": "vsce package"
+    "package": "vsce package",
+    "version:patch": "pnpm run lint && pnpm run compile && npm version patch",
+    "version:minor": "pnpm run lint && pnpm run compile && npm version minor",
+    "version:major": "pnpm run lint && pnpm run compile && npm version major",
+    "version:prerelease": "pnpm run lint && pnpm run compile && npm version prerelease",
+    "release": "pnpm run lint && pnpm run compile && pnpm run package"
   },
   "devDependencies": {
     "@types/node": "^25.0.9",
