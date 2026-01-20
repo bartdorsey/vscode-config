@@ -47,17 +47,19 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run compile",
+    "vscode:prepublish": "pnpm run bundle",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "bundle": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --target=node18 --minify",
+    "watch": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --target=node18 --watch",
+    "clean": "rm -rf out *.vsix",
     "lint": "eslint src --ext ts",
     "package": "vsce package",
     "install-local": "pnpm run package && code --install-extension vscode-config-*.vsix",
-    "version:patch": "pnpm run lint && pnpm run compile && npm version patch",
-    "version:minor": "pnpm run lint && pnpm run compile && npm version minor",
-    "version:major": "pnpm run lint && pnpm run compile && npm version major",
-    "version:prerelease": "pnpm run lint && pnpm run compile && npm version prerelease",
-    "release": "pnpm run lint && pnpm run compile && pnpm run package"
+    "version:patch": "pnpm run lint && pnpm run bundle && npm version patch",
+    "version:minor": "pnpm run lint && pnpm run bundle && npm version minor",
+    "version:major": "pnpm run lint && pnpm run bundle && npm version major",
+    "version:prerelease": "pnpm run lint && pnpm run bundle && npm version prerelease",
+    "release": "pnpm run lint && pnpm run bundle && pnpm run package"
   },
   "devDependencies": {
     "@types/node": "^25.0.9",
@@ -65,6 +67,7 @@
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
     "@vscode/vsce": "^3.7.1",
+    "esbuild": "^0.24.2",
     "eslint": "^9.39.2",
     "typescript": "^5.9.3"
   }
