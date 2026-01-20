@@ -3,7 +3,7 @@ import * as os from "os";
 import { defaultSettings } from "./settings";
 import { StatusBar, SetupStatus } from "./statusBar";
 
-// Required extensions for the bootcamp
+// Required extensions
 const REQUIRED_EXTENSIONS = [
   "ms-python.python",
   "ms-python.black-formatter",

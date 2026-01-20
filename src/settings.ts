@@ -1,7 +1,5 @@
 /**
- * Default settings for  bootcamp students
- *
- * Customize these settings according to your bootcamp's needs
+ * Default settings
  */
 export const defaultSettings: Record<string, any> = {
   // Workbench settings
