@@ -9,6 +9,11 @@ on:
     types: [created, published]
   workflow_dispatch:
 
+permissions:
+  contents: write
+  actions: read
+  checks: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
