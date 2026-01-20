@@ -1,5 +1,13 @@
 /**
- * Default settings
+ * Comprehensive VS Code settings configuration optimized for developer productivity.
+ * Includes settings for workbench appearance, editor behavior, language-specific formatting,
+ * and cross-platform compatibility. All settings are applied at the Global configuration target.
+ *
+ * Key philosophy:
+ * - Aggressive type hints and IntelliSense for better code understanding
+ * - Consistent formatting across languages (Prettier for JS/TS, Black for Python)
+ * - Conservative auto-import settings to reduce noise
+ * - GitHub Copilot disabled by default, enabled explicitly through commands
  */
 export const defaultSettings: Record<string, any> = {
   // Workbench settings

@@ -23,6 +23,13 @@ const COPILOT_EXTENSIONS = ["github.copilot", "github.copilot-chat"];
 // WSL-specific extension
 const WSL_EXTENSION = "ms-vscode-remote.remote-wsl";
 
+/**
+ * Detects the current development environment by analyzing VS Code's remote context
+ * and the underlying operating system.
+ *
+ * @returns The detected environment: "windows" for Windows, "wsl" for Windows Subsystem for Linux,
+ *          "linux" for native Linux, or "other" for unrecognized environments
+ */
 function getEnvironment(): "windows" | "wsl" | "linux" | "other" {
   const remoteName = vscode.env.remoteName;
 
@@ -46,6 +53,13 @@ function getEnvironment(): "windows" | "wsl" | "linux" | "other" {
   return "other";
 }
 
+/**
+ * Installs required VS Code extensions based on the current environment.
+ * Automatically adds WSL extension for Windows and WSL environments.
+ *
+ * @returns Promise resolving to installation statistics including counts of
+ *          installed, failed, and skipped extensions
+ */
 async function installExtensions(): Promise<{
   installed: number;
   failed: number;
@@ -93,6 +107,12 @@ async function installExtensions(): Promise<{
   return { installed, failed, skipped };
 }
 
+/**
+ * Activates the VS Code extension by registering all commands and initializing the status bar.
+ * Sets up command handlers for configuration, Copilot management, and cleanup operations.
+ *
+ * @param context The VS Code extension context for managing subscriptions and state
+ */
 export function activate(context: vscode.ExtensionContext) {
   // Create status bar
   const statusBar = new StatusBar();
@@ -123,7 +143,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       const menuItems = [
         {
-          label: "$(rocket) Configure Settings",
+          label: "$(gear) Configure Settings",
           description: "Install extensions and apply  settings",
           action: "configure",
         },
@@ -714,4 +734,8 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(cleanupCommand);
 }
 
+/**
+ * Deactivates the VS Code extension. Currently performs no cleanup operations
+ * as all resources are managed through the extension context subscriptions.
+ */
 export function deactivate() {}
