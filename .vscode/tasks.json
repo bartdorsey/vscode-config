@@ -2,8 +2,13 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "npm",
-      "script": "watch",
+      "type": "shell",
+      "label": "pnpm: watch",
+      "command": "pnpm",
+      "args": [
+        "run",
+        "watch"
+      ],
       "problemMatcher": "$tsc-watch",
       "isBackground": true,
       "presentation": {
@@ -13,6 +18,38 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "type": "shell",
+      "label": "pnpm: compile",
+      "command": "pnpm",
+      "args": [
+        "run",
+        "compile"
+      ],
+      "problemMatcher": "$tsc",
+      "group": "build"
+    },
+    {
+      "type": "shell",
+      "label": "pnpm: lint",
+      "command": "pnpm",
+      "args": [
+        "run",
+        "lint"
+      ],
+      "problemMatcher": "$eslint-stylish",
+      "group": "test"
+    },
+    {
+      "type": "shell",
+      "label": "pnpm: package",
+      "command": "pnpm",
+      "args": [
+        "run",
+        "package"
+      ],
+      "group": "build"
     }
   ]
 }

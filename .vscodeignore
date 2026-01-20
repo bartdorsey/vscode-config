@@ -1,7 +1,50 @@
+# Build outputs
 .vscode/**
 .vscode-test/**
+.vscode-test-web/**
+
+# Source files (only include compiled outputs)
 src/**
-.gitignore
-tsconfig.json
+tsconfig*.json
+webpack*.js
 **/*.map
 **/*.ts
+
+# Dependencies and package manager artifacts
+node_modules
+.pnpm-store
+.npm
+.yarn
+pnpm-lock.yaml
+
+# Development files
+.env
+.env.*
+*.log
+.gitignore
+.git
+
+# GitHub Actions and documentation
+.github/**
+README.md
+CHANGELOG.md
+docs/**
+
+# Config files not needed at runtime
+.prettierrc*
+.eslintrc*
+eslint.config.*
+.editorconfig
+
+# Test files
+**/*.test.*
+**/*.spec.*
+test/**
+tests/**
+__tests__/**
+
+# OS generated files
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp

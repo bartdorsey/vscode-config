@@ -12,6 +12,19 @@
         "${workspaceFolder}/out/**/*.js"
       ],
       "preLaunchTask": "${defaultBuildTask}"
+    },
+    {
+      "name": "Run Extension (Development Host)",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--disable-extensions"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/out/**/*.js"
+      ],
+      "preLaunchTask": "pnpm: compile"
     }
   ]
 }
