@@ -9,7 +9,13 @@
  * - Conservative auto-import settings to reduce noise
  * - GitHub Copilot disabled by default, enabled explicitly through commands
  */
-export const defaultSettings: Record<string, any> = {
+
+export type Environment = "windows" | "wsl" | "linux" | "other";
+
+/**
+ * Settings that apply to all operating systems
+ */
+const commonSettings: Record<string, any> = {
   // Workbench settings
   "workbench.tree.indent": 20,
   "workbench.editor.labelFormat": "short",
@@ -37,15 +43,6 @@ export const defaultSettings: Record<string, any> = {
   // Git
   "git.openRepositoryInParentFolders": "always",
   "git.autofetch": true,
-
-  // vs64 (C64 dev
-  "vs64.showWelcome": false,
-  "vs64.kickInstallDir": "E:\\c64\\coding\\KickAssembler",
-  "vs64.acmeInstallDir": "E:\\c64\\coding",
-  "vs64.viceExecutable": "E:\\c64\\GTK3VICE-3.10-win64\\bin\\x64sc.exe",
-  "vs64.llvmInstallDir": "E:\\c64\\coding\\llvm-mos",
-  "vs64.cc65InstallDir": "C:\\Users\\bart\\scoop\\apps\\cc65\\current",
-  "vs64.oscar64InstallDir": "C:\\Program Files\\Oscar64",
 
   // Copilot settings - disabled by default
   "github.copilot.enable": {
@@ -177,3 +174,65 @@ export const defaultSettings: Record<string, any> = {
     },
   ],
 };
+
+/**
+ * Windows-specific settings (primarily development tool paths)
+ */
+const windowsSettings: Record<string, any> = {
+  // vs64 (C64 development tools - Windows paths)
+  "vs64.showWelcome": false,
+  "vs64.kickInstallDir": "E:\\c64\\coding\\KickAssembler",
+  "vs64.acmeInstallDir": "E:\\c64\\coding",
+  "vs64.viceExecutable": "E:\\GTK3VICE-3.10-win64\\bin\\x64sc.exe",
+  "vs64.llvmInstallDir": "E:\\c64\\coding\\llvm-mos",
+  "vs64.cc65InstallDir": "C:\\Users\\bart\\scoop\\apps\\cc65\\current",
+  "vs64.oscar64InstallDir": "C:\\Program Files\\Oscar64",
+};
+
+/**
+ * Linux-specific settings (currently empty, but available for future use)
+ */
+const linuxSettings: Record<string, any> = {
+  // Future Linux-specific settings can go here
+};
+
+/**
+ * WSL-specific settings (currently empty, but available for future use)
+ */
+const wslSettings: Record<string, any> = {
+  // Future WSL-specific settings can go here
+};
+
+/**
+ * Combines common settings with OS-specific settings based on environment
+ * @param environment The detected environment: "windows" | "wsl" | "linux" | "other"
+ * @returns Merged settings object appropriate for the current environment
+ */
+export function getSettingsForEnvironment(
+  environment: "windows" | "wsl" | "linux" | "other",
+): Record<string, any> {
+  let osSpecificSettings: Record<string, any> = {};
+
+  switch (environment) {
+    case "windows":
+      osSpecificSettings = windowsSettings;
+      break;
+    case "wsl":
+      osSpecificSettings = { ...windowsSettings, ...wslSettings };
+      break;
+    case "linux":
+      osSpecificSettings = linuxSettings;
+      break;
+    case "other":
+      // No OS-specific settings for unrecognized environments
+      break;
+  }
+
+  return { ...commonSettings, ...osSpecificSettings };
+}
+
+/**
+ * Legacy export for backward compatibility
+ * @deprecated Use getSettingsForEnvironment() instead
+ */
+export const defaultSettings = commonSettings;

@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as os from "os";
-import { defaultSettings } from "./settings";
+import { getSettingsForEnvironment, type Environment } from "./settings";
 import { StatusBar, SetupStatus } from "./statusBar";
 
 // Required extensions
@@ -42,8 +42,6 @@ const REQUIRED_EXTENSIONS = [
   // AI
   "sst-dev.opencode",
   "Anthropic.claude-code",
-  // C64 dev
-  "rosc.vs64",
 ];
 
 // Copilot extensions (installed separately)
@@ -52,6 +50,17 @@ const COPILOT_EXTENSIONS = ["github.copilot", "github.copilot-chat"];
 // WSL-specific extension
 const WSL_EXTENSION = "ms-vscode-remote.remote-wsl";
 
+// Windows-specific extensions
+const WINDOWS_EXTENSIONS = [
+  "rosc.vs64", // C64 development
+];
+
+// Linux-specific extensions (currently none)
+const LINUX_EXTENSIONS: string[] = [];
+
+// WSL-specific extensions (currently none beyond Windows extensions)
+const WSL_SPECIFIC_EXTENSIONS: string[] = [];
+
 /**
  * Detects the current development environment by analyzing VS Code's remote context
  * and the underlying operating system.
@@ -59,7 +68,7 @@ const WSL_EXTENSION = "ms-vscode-remote.remote-wsl";
  * @returns The detected environment: "windows" for Windows, "wsl" for Windows Subsystem for Linux,
  *          "linux" for native Linux, or "other" for unrecognized environments
  */
-function getEnvironment(): "windows" | "wsl" | "linux" | "other" {
+function getEnvironment(): Environment {
   const remoteName = vscode.env.remoteName;
 
   if (remoteName === "wsl") {
@@ -83,6 +92,36 @@ function getEnvironment(): "windows" | "wsl" | "linux" | "other" {
 }
 
 /**
+ * Gets the complete list of extensions to install based on the environment
+ * @param environment The detected environment
+ * @returns Array of extension IDs to install
+ */
+function getExtensionsForEnvironment(environment: Environment): string[] {
+  const extensions = [...REQUIRED_EXTENSIONS];
+
+  switch (environment) {
+    case "windows":
+      extensions.push(...WINDOWS_EXTENSIONS, WSL_EXTENSION);
+      break;
+    case "wsl":
+      extensions.push(
+        ...WINDOWS_EXTENSIONS,
+        ...WSL_SPECIFIC_EXTENSIONS,
+        WSL_EXTENSION,
+      );
+      break;
+    case "linux":
+      extensions.push(...LINUX_EXTENSIONS);
+      break;
+    case "other":
+      // Only common extensions for unrecognized environments
+      break;
+  }
+
+  return extensions;
+}
+
+/**
  * Installs required VS Code extensions based on the current environment.
  * Automatically adds WSL extension for Windows and WSL environments.
  *
@@ -101,13 +140,26 @@ async function installExtensions(): Promise<{
   // Determine which extensions to install
   const extensionsToInstall = [...REQUIRED_EXTENSIONS];
 
-  // Add WSL extension on Windows or when running inside WSL
-  const isWindows = os.platform() === "win32";
-  const isWSL =
-    os.platform() === "linux" &&
-    os.release().toLowerCase().includes("microsoft");
-  if (isWindows || isWSL) {
-    extensionsToInstall.push(WSL_EXTENSION);
+  // Add environment-specific extensions
+  const environment = getEnvironment();
+
+  switch (environment) {
+    case "windows":
+      extensionsToInstall.push(...WINDOWS_EXTENSIONS, WSL_EXTENSION);
+      break;
+    case "wsl":
+      extensionsToInstall.push(
+        ...WINDOWS_EXTENSIONS,
+        ...WSL_SPECIFIC_EXTENSIONS,
+        WSL_EXTENSION,
+      );
+      break;
+    case "linux":
+      extensionsToInstall.push(...LINUX_EXTENSIONS);
+      break;
+    case "other":
+      // Only install common extensions for unrecognized environments
+      break;
   }
 
   for (const extensionId of extensionsToInstall) {
@@ -260,7 +312,10 @@ export function activate(context: vscode.ExtensionContext) {
         let settingsSuccess = 0;
         let settingsError = 0;
 
-        for (const [key, value] of Object.entries(defaultSettings)) {
+        // Get environment-specific settings
+        const environmentSettings = getSettingsForEnvironment(environment);
+
+        for (const [key, value] of Object.entries(environmentSettings)) {
           try {
             await config.update(key, value, vscode.ConfigurationTarget.Global);
             settingsSuccess++;
@@ -647,11 +702,26 @@ export function activate(context: vscode.ExtensionContext) {
 
         // Build list of all extensions to uninstall
         const allExtensions = [...REQUIRED_EXTENSIONS];
-        const isWSL =
-          os.platform() === "linux" &&
-          os.release().toLowerCase().includes("microsoft");
-        if (isWSL) {
-          allExtensions.push("ms-vscode-remote.remote-wsl");
+        const environment = getEnvironment();
+
+        // Add environment-specific extensions to uninstall list
+        switch (environment) {
+          case "windows":
+            allExtensions.push(...WINDOWS_EXTENSIONS, WSL_EXTENSION);
+            break;
+          case "wsl":
+            allExtensions.push(
+              ...WINDOWS_EXTENSIONS,
+              ...WSL_SPECIFIC_EXTENSIONS,
+              WSL_EXTENSION,
+            );
+            break;
+          case "linux":
+            allExtensions.push(...LINUX_EXTENSIONS);
+            break;
+          case "other":
+            // Only uninstall common extensions for unrecognized environments
+            break;
         }
 
         vscode.window.showInformationMessage("Uninstalling extensions...");
@@ -706,7 +776,12 @@ export function activate(context: vscode.ExtensionContext) {
         const config = vscode.workspace.getConfiguration();
         let settingsReset = 0;
 
-        for (const key of Object.keys(defaultSettings)) {
+        // Get environment-specific settings to know which ones to reset
+        const cleanupEnvironment = getEnvironment();
+        const environmentSettings =
+          getSettingsForEnvironment(cleanupEnvironment);
+
+        for (const key of Object.keys(environmentSettings)) {
           try {
             await config.update(
               key,
