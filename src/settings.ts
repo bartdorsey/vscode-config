@@ -15,7 +15,6 @@ export const defaultSettings: Record<string, any> = {
   "workbench.editor.labelFormat": "short",
   "workbench.iconTheme": "vscode-jetbrains-icon-theme-2023-auto",
   "workbench.startupEditor": "none",
-  "workbench.editor.labelFormat": "short",
 
   // Explorer settings
   "explorer.compactFolders": false,
@@ -30,7 +29,6 @@ export const defaultSettings: Record<string, any> = {
   "editor.inlayHints.enabled": "offUnlessPressed",
   "editor.rulers": [80],
   "editor.minimap.enabled": false,
-  "editor.rulers": [80],
   "editor.wordWrap": "wordWrapColumn",
   "editor.wrappingStrategy": "advanced",
   "editor.fontFamily": "Iosevka Nerd Font",
