@@ -16,8 +16,8 @@ This is a VSCode extension that automates personal environment setup by installi
 
 The extension manages three categories of extensions with different installation strategies:
 
-- **Required Extensions**: Core development tools (Python, formatters, themes) installed automatically
-- **Copilot Extensions**: AI tools (`github.copilot`, `github.copilot-chat`) managed separately for selective enablement
+- **Required Extensions**: Core development tools including vim, Python, formatters, themes, C/C++, AI tools (OpenCode, Claude), and specialized tools (Typst, Excalidraw, C64 dev)
+- **Copilot Extensions**: GitHub AI tools (`github.copilot`, `github.copilot-chat`) managed separately for selective enablement
 - **Platform Extensions**: WSL extension added conditionally based on environment detection
 
 ### Environment Detection Pattern
@@ -34,8 +34,9 @@ Critical cross-platform logic in `getEnvironment()` function:
 
 ### Build & Development
 
-- **Watch Mode**: `npm run watch` - Essential during development for auto-compilation
-- **Package**: `npm run package` - Creates `.vsix` file for distribution
+- **Watch Mode**: `pnpm run watch` - Essential during development for auto-compilation using esbuild
+- **Package**: `pnpm run package` - Creates `.vsix` file for distribution
+- **Bundle**: `pnpm run bundle` - Production build with esbuild minification
 - **Extension Test**: Use F5 in VSCode to launch Extension Development Host
 
 ### Settings Management Pattern
@@ -48,9 +49,9 @@ All user settings are applied at `vscode.ConfigurationTarget.Global` level. The 
 
 ### Command Architecture
 
-Five main commands with consistent patterns:
+Four main commands with consistent patterns:
 
-- `bartdorsey.showMenu`: Dynamic QuickPick menu that adapts based on current state
+- `bartdorsey.showMenu`: Dynamic QuickPick menu that adapts based on current state (no longer in package.json contributes)
 - `bartdorsey.configureSettings`: Main setup flow with progress tracking
 - `bartdorsey.enableCopilot`/`bartdorsey.disableCopilot`: Toggleable AI feature management
 - `bartdorsey.cleanup`: Complete environment reset with confirmation dialogs
@@ -80,7 +81,15 @@ Five main commands with consistent patterns:
 ### Extension Installation Loop
 
 ```typescript
-// Standard pattern for batch extension installation
+// Standard pattern for batch extension installation with environment awareness
+let extensionsToInstall = [...REQUIRED_EXTENSIONS];
+const environment = getEnvironment();
+
+// Add WSL extension for Windows and WSL environments
+if (environment === "windows" || environment === "wsl") {
+  extensionsToInstall.push(WSL_EXTENSION);
+}
+
 for (const extensionId of extensionsToInstall) {
   const extension = vscode.extensions.getExtension(extensionId);
   if (extension) {
@@ -113,6 +122,7 @@ try {
 
 - **Uninstall Order**: Dependencies first (`ms-python.flake8` before `ms-python.python`, `github.copilot-chat` before `github.copilot`)
 - **Installation Order**: No specific order needed due to VS Code's dependency resolution
+- **Environment-Specific Extensions**: WSL extension only added for Windows and WSL environments
 
 ## Testing & Debugging Notes
 
@@ -120,6 +130,8 @@ try {
 - Status bar state persists across commands - useful for debugging setup flows
 - Extension host reload required after installing extensions to test full functionality
 - Console output provides detailed operation logs beyond user notifications
+- Use `pnpm run watch` during development for hot reloading with esbuild
+- Bundle size optimized with esbuild minification for production releases
 
 ## Configuration Philosophy
 
@@ -128,4 +140,6 @@ The [settings.ts](../src/settings.ts) file embodies a "developer productivity fi
 - Aggressive type hints and IntelliSense settings
 - Consistent formatting across languages (Prettier for JS/TS, Black for Python)
 - Conservative auto-import settings to avoid noise
+- Specialized language settings (C64 development, Typst, Excalidraw)
 - GitHub Copilot disabled by default, enabled explicitly through commands
+- Font configuration optimized for development (Iosevka Nerd Font)
