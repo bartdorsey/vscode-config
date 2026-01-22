@@ -5,16 +5,45 @@ import { StatusBar, SetupStatus } from "./statusBar";
 
 // Required extensions
 const REQUIRED_EXTENSIONS = [
+  // vim
+  "vscodevim.vim",
+  // General
+  "usernamehw.errorlens",
+  // Containers
+  "ms-azuretools.vscode-containers",
+  "ms-vscode-remote.remote-containers",
+  // Git
+  "github.vscode-github-actions",
+  // Python
   "ms-python.python",
+  "ms-python.debugpy",
   "ms-python.black-formatter",
   "ms-python.flake8",
+  "ms-python.vscode-python-envs",
+  // Themes
   "chadalen.vscode-jetbrains-icon-theme",
+  "jdinhlife.gruvbox",
+  // JavaScript/TypeScript
   "esbenp.prettier-vscode",
-  "usernamehw.errorlens",
   "dbaeumer.vscode-eslint",
+  "mattpocock.ts-error-translator",
+  // Markdown
   "yzhang.markdown-all-in-one",
   "bierner.markdown-mermaid",
+  // Typst
+  "myriad-dreamin.tinymist",
+  "myriad-dreamin.tinymist-vscode-html",
+  // Excalidraw
   "pomdtr.excalidraw-editor",
+  // C/C++
+  "ms-vscode.cpptools",
+  "ms-vscode.cpptools-extension-pack",
+  "ms-vscode.cmake-tools",
+  // AI
+  "sst-dev.opencode",
+  "Anthropic.claude-code",
+  // C64 dev
+  "rosc.vs64",
 ];
 
 // Copilot extensions (installed separately)

@@ -14,6 +14,8 @@ export const defaultSettings: Record<string, any> = {
   "workbench.tree.indent": 20,
   "workbench.editor.labelFormat": "short",
   "workbench.iconTheme": "vscode-jetbrains-icon-theme-2023-auto",
+  "workbench.startupEditor": "none",
+  "workbench.editor.labelFormat": "short",
 
   // Explorer settings
   "explorer.compactFolders": false,
@@ -27,6 +29,24 @@ export const defaultSettings: Record<string, any> = {
   "editor.guides.bracketPairs": true,
   "editor.inlayHints.enabled": "offUnlessPressed",
   "editor.rulers": [80],
+  "editor.minimap.enabled": false,
+  "editor.rulers": [80],
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wrappingStrategy": "advanced",
+  "editor.fontFamily": "Iosevka Nerd Font",
+
+  // Git
+  "git.openRepositoryInParentFolders": "always",
+  "git.autofetch": true,
+
+  // vs64 (C64 dev
+  "vs64.showWelcome": false,
+  "vs64.kickInstallDir": "E:\\c64\\coding\\KickAssembler",
+  "vs64.acmeInstallDir": "E:\\c64\\coding",
+  "vs64.viceExecutable": "E:\\c64\\GTK3VICE-3.10-win64\\bin\\x64sc.exe",
+  "vs64.llvmInstallDir": "E:\\c64\\coding\\llvm-mos",
+  "vs64.cc65InstallDir": "C:\\Users\\bart\\scoop\\apps\\cc65\\current",
+  "vs64.oscar64InstallDir": "C:\\Program Files\\Oscar64",
 
   // Copilot settings - disabled by default
   "github.copilot.enable": {
@@ -36,7 +56,12 @@ export const defaultSettings: Record<string, any> = {
     scminput: false,
     css: false,
   },
-  "chat.disableAIFeatures": true,
+  "chat.disableAIFeatures": false,
+
+  // ErrorLens
+  "errorLens.problemRangeDecorationEnabled": true,
+  "errorLens.gutterIconSet": "square",
+  "errorLens.followCursor": "closestProblem",
 
   // Files settings
   "files.trimTrailingWhitespace": true,
@@ -49,6 +74,20 @@ export const defaultSettings: Record<string, any> = {
     "**/node_modules": true,
     "**/.vscode": false,
   },
+
+  // Markdown
+  "markdown-mermaid.lightModeTheme": "dark",
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  // Emmet
+  "emmet.includeLanguages": {
+    "django-html": "html",
+    "jinja-html": "html",
+    javascript: "javascriptreact",
+  },
+  // YAML
+  "redhat.telemetry.enabled": false,
 
   // Terminal settings
   "terminal.integrated.scrollback": 10000,
@@ -81,6 +120,8 @@ export const defaultSettings: Record<string, any> = {
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
+  "totalTypeScript.hideAllTips": false,
+  "totalTypeScript.hideBasicTips": false,
 
   // Python settings
   "python.analysis.autoImportCompletions": false,
@@ -100,4 +141,40 @@ export const defaultSettings: Record<string, any> = {
 
   // HTML Formatting
   "html.format.indentInnerHtml": true,
+
+  // CSS
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+
+  // Vim
+  "vim.vimrc.path": "$HOME/.config/vim/vimrc",
+  "vim.vimrc.enable": true,
+  "vim.neovimUseConfigFile": true,
+  "vim.leader": "<space>",
+  "vim.highlightedyank.enable": true,
+  "vim.useSystemClipboard": true,
+  "vim.sneak": true,
+  "vim.sneakReplacesF": true,
+  "open-in-vim.useNeovim": true,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      before: ["<leader>", "/"],
+      after: ["<leader>", "<leader>", "s"],
+    },
+  ],
+  "vim.normalModeKeyBindings": [
+    {
+      before: ["<leader>", "f", "f"],
+      commands: ["television.ToggleFileFinder"],
+    },
+    {
+      before: ["<leader>", "f", "r"],
+      commands: ["television.ToggleTextFinder"],
+    },
+    {
+      before: ["<leader>", "<space>"],
+      commands: ["workbench.action.showAllEditors"],
+    },
+  ],
 };
