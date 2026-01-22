@@ -15,6 +15,7 @@ export const defaultSettings: Record<string, any> = {
   "workbench.editor.labelFormat": "short",
   "workbench.iconTheme": "vscode-jetbrains-icon-theme-2023-auto",
   "workbench.startupEditor": "none",
+  "workbench.colorTheme": "Gruvbox Dark Hard",
 
   // Explorer settings
   "explorer.compactFolders": false,
